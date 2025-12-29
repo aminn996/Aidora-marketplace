@@ -17,10 +17,8 @@ const {
 router.get('/', listServices);
 router.get('/nearby', getNearbyServices);
 router.get('/categories', getCategories);
-router.get('/:id', getService);
-router.get('/:id/reviews', getReviews);
 
-// Provider route for own services (must be before /:id route)
+// Provider route for own services (MUST be before /:id route)
 router.get('/my-services', protect, authorize('provider', 'admin'), async (req, res) => {
   try {
     const services = await require('../models/Service').find({ provider: req.user.id });
@@ -29,6 +27,9 @@ router.get('/my-services', protect, authorize('provider', 'admin'), async (req, 
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+router.get('/:id', getService);
+router.get('/:id/reviews', getReviews);
 
 // Review submission
 router.post('/:id/reviews', protect, addReview);
