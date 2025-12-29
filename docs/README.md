@@ -34,7 +34,7 @@
 ## 📁 Project Structure
 
 ```
-aidora/
+docs/
 ├── backend/                    # Express.js API
 │   ├── config/
 │   │   ├── db.js              # MongoDB connection
@@ -104,7 +104,7 @@ aidora/
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd aidora
+cd docs
 
 # Backend setup
 cd backend
