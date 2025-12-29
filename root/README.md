@@ -2,6 +2,19 @@
 
 > **Modern service booking platform with email notifications, Google OAuth, Facebook OAuth, and real-time booking management.**
 
+## 🎯 Ready to Deploy?
+
+**📚 [START HERE: Deployment Documentation Index](DEPLOYMENT_INDEX.md)**
+
+Complete deployment guides available:
+- **[Quick Deploy (15 min)](QUICK_DEPLOY.md)** - Fast deployment to production
+- **[Complete Guide](DEPLOYMENT_GUIDE.md)** - Comprehensive deployment documentation
+- **[Platform Comparison](PLATFORM_COMPARISON.md)** - Choose the best platform for your needs
+- **[Deployment Checklist](DEPLOYMENT_CHECKLIST.md)** - Verify everything works
+- **[Architecture Diagrams](DEPLOYMENT_ARCHITECTURE.md)** - Understand the system
+
+---
+
 ## ✨ Features Implemented
 
 ### 🎯 Core Features
