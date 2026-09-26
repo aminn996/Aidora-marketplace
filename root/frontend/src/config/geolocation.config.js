@@ -43,7 +43,7 @@ export const GEOLOCATION_CONFIG = {
     },
     {
       name: 'ip-api',
-      url: 'http://ip-api.com/json/',
+      url: 'https://ip-api.com/json/',
       parser: (data) => ({
         lat: data.lat,
         lng: data.lon,
@@ -83,8 +83,8 @@ export const GEOLOCATION_CONFIG = {
   FEATURES: {
     autoStart: true, // Automatically start location detection
     watchPosition: false, // Continuously track location changes
-    ipFallback: false, // Use IP-based location if GPS fails (disabled due to CORS)
-    reverseGeocode: false, // Convert coordinates to address (disabled to reduce API calls)
+    ipFallback: true, // Use approximate IP location if GPS is unavailable
+    reverseGeocode: true, // Show a human-readable address when available
     cacheResults: true, // Store location in localStorage
     showAccuracy: true, // Display accuracy information to users
   },
