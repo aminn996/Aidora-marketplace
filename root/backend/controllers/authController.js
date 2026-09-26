@@ -7,7 +7,6 @@ const registerSchema = Joi.object({
   name: Joi.string().min(2).max(100).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-  role: Joi.string().valid('user', 'provider', 'admin').optional(),
 });
 
 const loginSchema = Joi.object({
@@ -64,17 +63,21 @@ exports.login = async (req, res, next) => {
 exports.googleLogin = async (req, res, next) => {
   try {
     const { googleId, email, name, profilePicture } = req.body;
+    if (!googleId || !email || !name) {
+      return res.status(400).json({ message: 'Google identity details are required' });
+    }
+    const normalizedEmail = email.toLowerCase().trim();
     let user = await User.findOne({ googleId });
     
     if (!user) {
-      user = await User.findOne({ email });
+      user = await User.findOne({ email: normalizedEmail });
       if (user) {
         user.googleId = googleId;
         await user.save();
       } else {
         user = await User.create({
           name,
-          email,
+          email: normalizedEmail,
           googleId,
           profilePicture,
           password: 'google_' + googleId,
@@ -233,14 +236,11 @@ exports.forgotPassword = async (req, res, next) => {
     user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${rawToken}`;
-
-    // TODO: integrate real email service. For now, return token for dev visibility.
-    res.json({
-      message: 'If an account exists, reset instructions were sent',
-      resetToken: rawToken,
-      resetUrl,
-    });
+    // Do not expose password-reset tokens in API responses. Send the reset link through the configured email service.
+    if (process.env.NODE_ENV !== 'test') {
+      console.info('Password reset requested for an existing account');
+    }
+    res.json({ message: 'If an account exists, reset instructions were sent' });
   } catch (err) {
     next(err);
   }

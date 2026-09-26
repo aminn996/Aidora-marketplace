@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import { DarkModeProvider } from './context/DarkModeContext.jsx';
+import { LanguageProvider } from './context/LanguageContext.jsx';
+import GeolocationSettings from './components/GeolocationSettings.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 
 // Pages
@@ -49,6 +51,7 @@ function AppContent() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/guest-settings" element={<GuestSettings />} />
+          <Route path="/location" element={<GeolocationSettings />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           
@@ -141,12 +144,14 @@ function AppContent() {
 
 export default function App() {
   return (
-    <DarkModeProvider>
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <LanguageProvider>
+      <DarkModeProvider>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <AuthProvider>
           <AppContent />
         </AuthProvider>
-      </BrowserRouter>
-    </DarkModeProvider>
+        </BrowserRouter>
+      </DarkModeProvider>
+    </LanguageProvider>
   );
 }

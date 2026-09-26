@@ -137,6 +137,29 @@ const GeolocationSettings = () => {
           )}
         </div>
 
+        {coords && (
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Map Preview</h3>
+            <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600">
+              <iframe
+                title="Current location map"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${coords.lng - 0.02}%2C${coords.lat - 0.015}%2C${coords.lng + 0.02}%2C${coords.lat + 0.015}&layer=mapnik&marker=${coords.lat}%2C${coords.lng}`}
+                className="h-72 w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <a
+              href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lng}#map=14/${coords.lat}/${coords.lng}`}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-block text-sm font-semibold text-blue-600 hover:text-blue-700"
+            >
+              Open map in a new tab
+            </a>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">

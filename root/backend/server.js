@@ -35,10 +35,18 @@ app.use(compression());
 app.use(xssClean());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
-// CORS (allow dev origins broadly and handle preflight)
+// CORS: allow only explicitly configured frontend origins.
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: true, // reflect request origin in dev; set to array/env for prod
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error('Origin is not allowed by CORS'));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -61,6 +69,9 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
 });
 app.use('/api/', apiLimiter);
+app.use('/api/auth/login', rateLimit({ windowMs: 15 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false }));
+app.use('/api/auth/register', rateLimit({ windowMs: 60 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false }));
+app.use('/api/auth/forgot-password', rateLimit({ windowMs: 60 * 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false }));
 
 // Health and status endpoint
 app.get('/api/health', (req, res) => {

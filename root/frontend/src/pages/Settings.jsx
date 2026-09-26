@@ -18,6 +18,7 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useDarkMode } from '../context/DarkModeContext';
 import GuestSettings from './GuestSettings';
+import { useLanguage } from '../context/LanguageContext';
 
 const DEFAULT_NOTIFICATIONS = {
   emailNotifications: true,
@@ -55,6 +56,7 @@ const DISTANCE_UNITS = [
 export default function Settings() {
   const { user, updateProfile, loading: authLoading } = useAuth();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { setLanguage } = useLanguage();
 
   const [activeTab, setActiveTab] = useState('profile');
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -209,7 +211,7 @@ export default function Settings() {
       });
       if (preferences.theme === 'dark' && !isDarkMode) toggleDarkMode();
       if (preferences.theme === 'light' && isDarkMode) toggleDarkMode();
-      localStorage.setItem('aidora-language', preferences.language);
+      setLanguage(preferences.language);
       toast.success('Preferences saved');
     } catch (err) {
       console.error(err);
